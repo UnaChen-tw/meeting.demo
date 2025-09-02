@@ -120,28 +120,32 @@
             <div class="container">
                 <h2 style="font-size: 1.2rem; margin-bottom: 16px;">System Prompt</h2>
                 <textarea id="systemPrompt" placeholder="請輸入 System Prompt..."
-                    style="width: 90%; height: 120px; border-radius: 8px; border: 1px solid #cbd5e1; 
+                    style="flex: 1;width: 90%; height: 60px; border-radius: 8px; border: 1px solid #cbd5e1; 
                     padding: 12px; font-size: 1rem; resize: vertical;">你是一位助理，請將以下會議逐字稿改現成會議記錄，需要有討論主題、討論內容(使用要點式的方式)、結論、跟下次追踨事項，使用者若有輸入prompt，則優先使用。</textarea>
+                <h2 style="font-size: 1.2rem; margin-bottom: 16px;">Your Prompt</h2>
+                <textarea id="llmPrompt" placeholder="請輸入提示詞（Prompt）..." 
+                    style="flex: 1; width: 90%; height: 60px; border-radius: 8px; border: 1px solid #cbd5e1; 
+                    padding: 12px; font-size: 1rem; resize: vertical;"></textarea>
+
             </div>
             <div class="transcript-workspace">
                 <label for="textFileSelect">選擇文字檔：</label>
                 <select id="textFileSelect">
                     <option value="">-- 請選擇 --</option>
-                    <option value="test_file_0828.txt">test_file_0828.txt</option>
-                    <option value="LLM_lesson.txt">LLM_lesson.txt</option>
+                    <option value="/static/test_file_0828.txt">test_file_0828.txt</option>
+                    <option value="/static/LLM_lesson.txt">LLM_lesson.txt</option>
                 </select>
                 <div id="transcribeResult" style="flex: 1; color:#334155; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; padding: 15px; text-align: left; font-size: 1rem; line-height: 1.6;"></div>
             </div>
         </div>
         <div class="llm-workspace">
-            <label>會議記錄生成：</label>
-            <textarea id="llmPrompt" placeholder="請輸入提示詞（Prompt）..." style="width:100%; min-height: 80px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #cbd5e1; padding: 12px; font-size: 1rem; resize: vertical;"></textarea>
             <button id="generateMeetingBtn" style="margin-bottom: 15px; align-self: flex-start;">生成會議記錄</button>
             <div id="llmResult" style="flex: 1; color:#334155; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; padding: 20px; text-align: left; font-size: 1rem; line-height: 1.8; white-space: pre-wrap; word-wrap: break-word;"></div>
         </div>
     </div>
     <script>
         const transcribeResult = document.getElementById('transcribeResult');
+
         const textFileSelect = document.getElementById('textFileSelect');
         const systemPrompt = document.getElementById('systemPrompt');
         const generateMeetingBtn = document.getElementById('generateMeetingBtn');
@@ -196,6 +200,7 @@
                 transcribeResult.textContent = '載入檔案失敗：' + e.message;
             }
         });
+
 
     </script>
 </body>
