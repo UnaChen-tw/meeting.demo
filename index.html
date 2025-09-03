@@ -168,6 +168,7 @@
                         systemPrompt: sysPrompt
                     })
                 });
+                console.log(fullPrompt, input, sysPrompt)
                 if (!response.ok) throw new Error('API 回應失敗');
                 const data = await response.json();
                 llmResult.innerHTML = (data.response || JSON.stringify(data)).replace(/\n/g, '<br>');
