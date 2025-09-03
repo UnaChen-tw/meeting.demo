@@ -139,7 +139,7 @@
             </div>
         </div>
         <div class="llm-workspace">
-            <button id="generateMeetingBtn" style="margin-bottom: 15px; align-self: flex-start;">生成會議記錄</button>
+            <button id="generateMeetingBtn" style="margin-bottom: 15px; align-self: flex-start;">生成</button>
             <div id="llmResult" style="flex: 1; color:#334155; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; padding: 20px; text-align: left; font-size: 1rem; line-height: 1.8; white-space: pre-wrap; word-wrap: break-word;"></div>
         </div>
     </div>
@@ -156,12 +156,8 @@
             const input = transcribeResult.textContent.trim();
             const prompt = llmPrompt.value.trim();
             const sysPrompt = systemPrompt.value.trim();
-
-            if (!input) {
-                llmResult.innerHTML = '請先選擇並載入文字檔案';
-                return;
-            }
             const fullPrompt = prompt;
+            
             llmResult.innerHTML = '正在向 Nova 生成會議記錄...';
             try {
                 const response = await fetch('https://kj1v21xdd8.execute-api.us-east-1.amazonaws.com/default/meetingnote', {
