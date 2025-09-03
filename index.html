@@ -154,7 +154,7 @@
         generateMeetingBtn.addEventListener('click', async function() {
             const input = transcribeResult.textContent.trim();
             const prompt = llmPrompt.value.trim();
-            const sysPrompt = systemPrompt.value.trim();
+            const sysPrompt = systemPrompt.value;
             const fullPrompt = prompt;
             
             llmResult.innerHTML = '正在向 Nova 生成會議記錄...';
