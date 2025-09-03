@@ -157,7 +157,7 @@
             const sysPrompt = systemPrompt.value;
             const fullPrompt = prompt;
             
-            llmResult.innerHTML = '正在向 Nova 生成會議記錄...';
+            llmResult.innerHTML = '正在向生成...';
             try {
                 const response = await fetch('https://kj1v21xdd8.execute-api.us-east-1.amazonaws.com/default/meetingnote', {
                     method: 'POST',
