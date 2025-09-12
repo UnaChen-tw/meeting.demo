@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>檔案上傳</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #a3b5d9 0%, #5588ed 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            height: 510px;
+        }
+
+        .article-viewer {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+            height: 510px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .article-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 21px;
+            font-weight: 600;
+        }
+
+        .article-content {
+            color: #555;
+            line-height: 1.6;
+            font-size: 12px;
+            white-space: pre-wrap;
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 20px;
+            background: #fafafa;
+        }
+
+        .article-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .article-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .article-content::-webkit-scrollbar-thumb {
+            background: #a3b5d9;
+            border-radius: 4px;
+        }
+
+        .article-content::-webkit-scrollbar-thumb:hover {
+            background: #8fa3c7;
+        }
+
+        .no-content {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            margin-top: 100px;
+        }
+
+        .title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 21px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 12px;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #546e7a;
+        }
+
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-label {
+            display: block;
+            padding: 20px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            text-align: center;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .file-label:hover {
+            border-color: #546e7a;
+            background: #f0f4f5;
+        }
+
+        .file-icon {
+            font-size: 48px;
+            color: #ccc;
+            margin-bottom: 10px;
+        }
+
+        .file-text {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #a3b5d9 0%, #8fa3c7 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(163, 181, 217, 0.3);
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(135deg, #8fa3c7 0%, #7a8fb5 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(163, 181, 217, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 10px rgba(163, 181, 217, 0.3);
+        }
+
+        .file-name {
+            margin-top: 10px;
+            padding: 10px;
+            background: #e8f4f8;
+            border-radius: 5px;
+            color: #37474f;
+            font-size: 10.5px;
+            display: none;
+        }
+
+        .process-btn {
+            padding: 15px;
+            background: linear-gradient(135deg, #a3b5d9 0%, #8fa3c7 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 13.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(163, 181, 217, 0.3);
+            flex: 1;
+        }
+
+        .process-btn:hover {
+            background: linear-gradient(135deg, #8fa3c7 0%, #7a8fb5 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(163, 181, 217, 0.4);
+        }
+
+        .process-btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 10px rgba(163, 181, 217, 0.3);
+        }
+
+        .bottom-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .number-select {
+            padding: 15px 10px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 13.5px;
+            background: white;
+            color: #555;
+            cursor: pointer;
+            width: 80px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">檔案上傳</h1>
+        
+        <form id="uploadForm" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="employeeId">工號</label>
+                <input type="text" id="employeeId" name="employeeId" required placeholder="請輸入您的工號">
+            </div>
+
+            <div class="form-group">
+                <label>選擇檔案</label>
+                <div class="file-upload">
+                    <input type="file" id="fileInput" name="file" class="file-input" required accept=".pdf">
+                    <label for="fileInput" class="file-label">
+                        <div class="file-icon">📁</div>
+                        <div class="file-text">點擊選擇PDF檔案或拖拽PDF檔案至此</div>
+                    </label>
+                    <div id="fileName" class="file-name"></div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">上傳檔案</button>
+        </form>
+    </div>
+
+    <div class="article-viewer">
+        <h2 class="article-title">文章預覽</h2>
+        <div id="articleContent" class="article-content">
+            <div class="no-content">請上傳PDF檔案以顯示內容</div>
+        </div>
+        <div class="bottom-controls" id="bottomControls" style="display: none;">
+            <select id="numberSelect" class="number-select">
+                <option value="100">100</option>
+                <option value="150">150</option>
+                <option value="200">200</option>
+                <option value="250">250</option>
+                <option value="300">300</option>
+            </select>
+            <button id="processBtn" class="process-btn">上傳至vector database</button>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const fileName = document.getElementById('fileName');
+        const fileLabel = document.querySelector('.file-label');
+
+        fileInput.addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                fileName.textContent = `已選擇: ${file.name}`;
+                fileName.style.display = 'block';
+                fileLabel.style.borderColor = '#546e7a';
+                fileLabel.style.background = '#e8f4f8';
+                
+                // 讀取並顯示文章內容
+                readFileContent(file);
+            }
+        });
+
+        function readFileContent(file) {
+            const articleContent = document.getElementById('articleContent');
+            const bottomControls = document.getElementById('bottomControls');
+            
+            if (file.type === 'application/pdf') {
+                articleContent.innerHTML = `
+                    <div style="font-weight: bold; margin-bottom: 15px;">檔案名稱: ${file.name}</div>
+                    <div style="text-align: center; padding: 50px;">
+                        <div style="font-size: 48px; margin-bottom: 20px;">📄</div>
+                        <div>PDF檔案已選擇</div>
+                        <div style="color: #666; font-size: 14px; margin-top: 10px;">檔案大小: ${(file.size / 1024 / 1024).toFixed(2)} MB</div>
+                        <div style="color: #666; font-size: 14px;">瀏覽器無法直接預覽PDF內容</div>
+                    </div>
+                `;
+                bottomControls.style.display = 'flex';
+            } else {
+                articleContent.innerHTML = '<div style="color: #d32f2f;">請選擇PDF檔案</div>';
+                bottomControls.style.display = 'none';
+            }
+        }
+
+        document.getElementById('processBtn').addEventListener('click', function() {
+            const employeeId = document.getElementById('employeeId').value;
+            const selectedNumber = document.getElementById('numberSelect').value;
+            
+            if (!employeeId) {
+                alert('請先輸入工號');
+                return;
+            }
+
+            alert(`上傳PDF文件...\n選擇數字: ${selectedNumber}`);
+            
+        });
+
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const employeeId = document.getElementById('employeeId').value;
+            const file = fileInput.files[0];
+            
+            if (!employeeId || !file) {
+                alert('請填寫工號並選擇檔案');
+                return;
+            }
+            
+            // 這裡可以加入實際的上傳邏輯
+            alert(`工號: ${employeeId}\n檔案: ${file.name}\n上傳成功！`);
+            
+            // 上傳成功後保持文章顯示
+            if (!document.getElementById('articleContent').innerHTML.includes('請上傳文章檔案')) {
+                // 文章已顯示，保持現狀
+            }
+        });
+
+        // 拖拽功能
+        fileLabel.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#546e7a';
+            this.style.background = '#f0f4f5';
+        });
+
+        fileLabel.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#ccc';
+            this.style.background = '#f8f9fa';
+        });
+
+        fileLabel.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.style.borderColor = '#ccc';
+            this.style.background = '#f8f9fa';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                const file = files[0];
+                fileName.textContent = `已選擇: ${file.name}`;
+                fileName.style.display = 'block';
+                this.style.borderColor = '#546e7a';
+                this.style.background = '#e8f4f8';
+                
+                // 讀取並顯示文章內容
+                readFileContent(file);
+            }
+        });
+    </script>
+</body>
+</html>
