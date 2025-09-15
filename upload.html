@@ -327,6 +327,9 @@
                     // 上傳到後端
                     const response = await fetch('https://aiworkshop01backend-eagndfgrfscufke5.westus3-01.azurewebsites.net/doc', {
                         method: 'POST',
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
                         body: formData
                     });
                     
