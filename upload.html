@@ -304,21 +304,58 @@
             }
         });
 
-        function readFileContent(file) {
+        async function readFileContent(file) {
             const articleContent = document.getElementById('articleContent');
             const bottomControls = document.getElementById('bottomControls');
             
             if (file.type === 'application/pdf') {
+                // 顯示載入中狀態
                 articleContent.innerHTML = `
                     <div style="font-weight: bold; margin-bottom: 15px;">檔案名稱: ${file.name}</div>
                     <div style="text-align: center; padding: 50px;">
-                        <div style="font-size: 48px; margin-bottom: 20px;">📄</div>
-                        <div>PDF檔案已選擇</div>
+                        <div style="font-size: 48px; margin-bottom: 20px;">⏳</div>
+                        <div>正在處理PDF檔案...</div>
                         <div style="color: #666; font-size: 14px; margin-top: 10px;">檔案大小: ${(file.size / 1024 / 1024).toFixed(2)} MB</div>
-                        <div style="color: #666; font-size: 14px;">瀏覽器無法直接預覽PDF內容</div>
                     </div>
                 `;
-                bottomControls.style.display = 'flex';
+                
+                try {
+                    // 建立 FormData 上傳檔案
+                    const formData = new FormData();
+                    formData.append('file', file);
+                    
+                    // 上傳到後端
+                    const response = await fetch('https://aiworkshop01backend-eagndfgrfscufke5.westus3-01.azurewebsites.net/doc', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (response.ok) {
+                        const textContent = await response.text();
+                        
+                        // 顯示返回的文字內容
+                        articleContent.innerHTML = `
+                            <div style="font-weight: bold; margin-bottom: 15px;">檔案名稱: ${file.name}</div>
+                            <div style="padding: 20px; line-height: 1.6; text-align: left;">
+                                ${textContent.replace(/\n/g, '<br>')}
+                            </div>
+                        `;
+                        bottomControls.style.display = 'flex';
+                    } else {
+                        throw new Error(`上傳失敗: ${response.status}`);
+                    }
+                } catch (error) {
+                    console.error('上傳錯誤:', error);
+                    articleContent.innerHTML = `
+                        <div style="font-weight: bold; margin-bottom: 15px;">檔案名稱: ${file.name}</div>
+                        <div style="color: #d32f2f; text-align: center; padding: 50px;">
+                            <div style="font-size: 48px; margin-bottom: 20px;">❌</div>
+                            <div>處理PDF檔案時發生錯誤</div>
+                            <div style="font-size: 14px; margin-top: 10px;">${error.message}</div>
+                        </div>
+                    `;
+                    bottomControls.style.display = 'none';
+                }
             } else {
                 articleContent.innerHTML = '<div style="color: #d32f2f;">請選擇PDF檔案</div>';
                 bottomControls.style.display = 'none';
