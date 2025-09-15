@@ -327,18 +327,16 @@
                     // 上傳到後端
                     const response = await fetch('https://aiworkshop01backend-eagndfgrfscufke5.westus3-01.azurewebsites.net/doc', {
                         method: 'POST',
-
                         body: formData
                     });
                     
                     if (response.ok) {
                         const result = await response.json();
-                        const textContent = result.response
                         // 顯示返回的文字內容
                         articleContent.innerHTML = `
                             <div style="font-weight: bold; margin-bottom: 15px;">檔案名稱: ${file.name}</div>
                             <div style="padding: 20px; line-height: 1.6; text-align: left;">
-                                ${textContent.replace(/\n/g, '<br>')}
+                                ${(result.response || JSON.stringify(result)).replace(/\n/g, '<br>')}
                             </div>
                         `;
                         bottomControls.style.display = 'flex';
