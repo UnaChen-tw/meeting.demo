@@ -341,7 +341,7 @@
                         articleContent.innerHTML = `
                             <div style="font-weight: bold; margin-bottom: 15px;">檔案名稱: ${file.name}</div>
                             <div style="padding: 20px; line-height: 1.6; text-align: left;">
-                                ${result.content.replace(/\n/g, '<br>')}
+                                ${(JSON.stringify(result).content).replace(/\n/g, '<br>')}
                             </div>
                         `;
                         bottomControls.style.display = 'flex';
