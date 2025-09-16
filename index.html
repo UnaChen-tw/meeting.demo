@@ -337,6 +337,7 @@
         }
 
         const result = await response.json();
+        console.log('機器人回覆:', result);
         const reply = result.response || '伺服器無法回應，請稍後再試。'; // 假設後端回傳的 JSON 格式中有 `response` 欄位
         console.log('機器人回覆:', reply);
         appendMessage(reply, 'bot');
