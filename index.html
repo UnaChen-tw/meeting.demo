@@ -292,14 +292,14 @@
           uploadContainer.style.display = 'none';
         }
         
-        if (selectedCategory === 'Building_a_RAG') {
-          meetingSelect1.style.display = 'none';
-          meetingSelect2.style.display = 'block';
-        }
-        else {
-          meetingSelect1.style.display = 'none';
-          meetingSelect2.style.display = 'none';
-        }
+        // if (selectedCategory === 'Building_a_RAG') {
+        //   meetingSelect1.style.display = 'none';
+        //   meetingSelect2.style.display = 'block';
+        // }
+        // else {
+        //   meetingSelect1.style.display = 'none';
+        //   meetingSelect2.style.display = 'none';
+        // }
 
       });
     });
@@ -337,8 +337,8 @@
         }
 
         const result = await response.json();
-        console.log('機器人回覆:', result);
-        const reply = result.response || '伺服器無法回應，請稍後再試。'; // 假設後端回傳的 JSON 格式中有 `response` 欄位
+        const parsedBody = JSON.parse(result.body); // 解析 result.body 的 JSON 字串
+        const reply = parsedBody.response || '伺服器無法回應，請稍後再試。'; // 假設後端回傳的 JSON 格式中有 `response` 欄位
         console.log('機器人回覆:', reply);
         appendMessage(reply, 'bot');
     } catch (error) {
