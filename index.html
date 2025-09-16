@@ -210,7 +210,7 @@
     <div class="workspace">
       <h2>工作區</h2>
       <button class="category-btn active" data-value="Building_a_RAG">Building a RAG</button>
-      <button class="category-btn" data-value="Harry_database">Harry Database</button>
+      <button class="category-btn" data-value="Chat_with_HR">Chat with HR</button>
     </div>
     <div class="chat-container" id="chatContainer">
       <div class="chat-header">聊天機器人</div>
@@ -269,11 +269,11 @@
     }
 
 
-    function getQType() {
-        if (selectedCategory === 'test_category') return meetingSelect2.value;
-        if (selectedCategory === 'meeting_notes') return meetingSelect1.value;
-        return 'default';
-      }
+    // function getQType() {
+    //     if (selectedCategory === 'test_category') return meetingSelect2.value;
+    //     if (selectedCategory === 'meeting_notes') return meetingSelect1.value;
+    //     return 'default';
+    //   }
 
 
     categoryBtns.forEach(btn => {
@@ -284,7 +284,7 @@
         
         chatMessages.innerHTML = '';
         
-        if (selectedCategory === 'test_category') {
+        if (selectedCategory === 'Building_a_RAG') {
           chatContainer.style.display = 'none';
           uploadContainer.style.display = 'block';
         } else {
@@ -292,7 +292,7 @@
           uploadContainer.style.display = 'none';
         }
         
-        if (selectedCategory === 'test_category') {
+        if (selectedCategory === 'Building_a_RAG') {
           meetingSelect1.style.display = 'none';
           meetingSelect2.style.display = 'block';
         }
